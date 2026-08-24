@@ -1,20 +1,6 @@
-import React, { useMemo, useState } from "react";
-import { BASE_MEASURE, MEASURE_FIELDS, type BodyScale, type Measure } from "../data/program";
-import MorphFigure from "../components/MorphFigure";
+import React, { useState } from "react";
+import { BASE_MEASURE, MEASURE_FIELDS, type Measure } from "../data/program";
 import { IconPlus, IconMinus, IconTrash, IconCheck, IconSparkle } from "../components/icons";
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-
-function toBody(m: Omit<Measure, "date">): BodyScale {
-  return {
-    chest: clamp(m.chest / BASE_MEASURE.chest, 0.7, 1.4),
-    waist: clamp(m.waist / BASE_MEASURE.waist, 0.62, 1.5),
-    hips: clamp(m.hips / BASE_MEASURE.hips, 0.7, 1.4),
-    thigh: clamp(m.thigh / BASE_MEASURE.thigh, 0.7, 1.4),
-    arm: clamp(m.arm / BASE_MEASURE.arm, 0.7, 1.4),
-    height: clamp((m.height || BASE_MEASURE.height) / BASE_MEASURE.height, 0.88, 1.12),
-  };
-}
 
 function Sparkline({ points }: { points: number[] }) {
   if (points.length < 2) {
@@ -76,7 +62,6 @@ export default function ProfilePage({
   onRemove: (idx: number) => void;
 }) {
   const latest = measures[measures.length - 1];
-  const first = measures[0];
 
   const [form, setForm] = useState<Omit<Measure, "date">>(() =>
     latest
@@ -86,8 +71,6 @@ export default function ProfilePage({
   const [saved, setSaved] = useState(false);
 
   const current: Omit<Measure, "date"> = latest ? { ...BASE_MEASURE, ...latest } : BASE_MEASURE;
-  const body = useMemo(() => toBody(current), [latest]); // eslint-disable-line react-hooks/exhaustive-deps
-  const ghost = useMemo(() => (first && measures.length > 1 ? toBody(first) : null), [first, measures.length]);
 
   const set = (k: keyof Omit<Measure, "date">, v: number) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -103,76 +86,71 @@ export default function ProfilePage({
   const goodWhenDown: (keyof Omit<Measure, "date">)[] = ["weight", "waist", "hips", "thigh"];
 
   return (
-    <div className="space-y-5">
+    <div className="mx-auto max-w-4xl space-y-5">
       <div className="reveal on text-center">
         <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Профиль и прогресс</h1>
-        <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
-          Замеры — самый честный индикатор: талия и бёдра скажут больше, чем весы. Фигура ниже строится по твоим замерам и меняется с каждым сохранением: пунктирный силуэт — твой первый замер, цветная фигура — текущий. Так прогресс виден наглядно.
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-fog">
+          Замеры — самый честный индикатор: талия и бёдра скажут больше, чем весы. Взвешивайся раз в неделю утром натощак, замеры — раз в две недели, и следи за динамикой ниже.
         </p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,440px)_1fr]">
-        {/* body: морфящаяся фигура по замерам */}
-        <section className="reveal on overflow-hidden rounded-3xl border border-white/10 bg-night-800/80">
-          <div className="flex items-center justify-center gap-2 border-b border-white/8 px-4 py-3">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-fog">Фигура по твоим замерам · обновляется с каждым сохранением</span>
+      {/* твоё тело сейчас */}
+      <section className="reveal on overflow-hidden rounded-3xl border border-white/10 bg-night-800/80">
+        <div className="flex flex-col items-center gap-4 border-b border-white/8 px-5 py-6 sm:flex-row sm:justify-between">
+          <div className="text-center sm:text-left">
+            <div className="flex items-center justify-center gap-2 sm:justify-start">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-fog">Твоё тело сейчас</span>
+            </div>
+            <div className="mt-2 font-display text-4xl font-extrabold tabular-nums sm:text-5xl">
+              {current.weight}
+              <span className="ml-1 text-lg text-fog">кг</span>
+              <span className="ml-4 text-2xl text-ink/70 sm:text-3xl">{current.height}</span>
+              <span className="ml-1 text-sm text-fog">см</span>
+            </div>
           </div>
-
-          <div className="relative h-[420px] sm:h-[480px]">
-            <div className="rise-in relative flex h-full items-center justify-center overflow-hidden">
-              <MorphFigure
-                key={`${current.chest}-${current.waist}-${current.hips}-${current.thigh}-${current.arm}-${current.height}`}
-                body={body}
-                ghost={ghost}
-                guides={{ chest: current.chest, waist: current.waist, hips: current.hips }}
-                className="h-full max-w-full"
-              />
-              {ghost && (
-                <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
-                  <span className="h-2.5 w-2.5 rounded-full border border-dashed border-lilac/70" /> пунктир — первый замер
+          {measures.length > 1 && (() => {
+            const d = current.weight - measures[measures.length - 2].weight;
+            const dd = current.waist - measures[measures.length - 2].waist;
+            return (
+              <div className="flex items-center gap-2">
+                <span className={`rounded-full px-3.5 py-2 text-xs font-bold tabular-nums ${d <= 0 ? "bg-mint/15 text-mint" : "bg-coral/15 text-coral"}`}>
+                  вес {d > 0 ? "+" : ""}{Math.round(d * 10) / 10} кг
+                </span>
+                <span className={`rounded-full px-3.5 py-2 text-xs font-bold tabular-nums ${dd <= 0 ? "bg-mint/15 text-mint" : "bg-coral/15 text-coral"}`}>
+                  талия {dd > 0 ? "+" : ""}{Math.round(dd * 10) / 10} см
+                </span>
+              </div>
+            );
+          })()}
+        </div>
+        <div className="grid grid-cols-3 gap-2 p-4 sm:grid-cols-7">
+          {MEASURE_FIELDS.map((f) => {
+            const d = delta(f.k);
+            const neutral = f.k === "height";
+            const good = d !== null && d !== 0 && (goodWhenDown.includes(f.k) ? d < 0 : d > 0);
+            return (
+              <div key={f.k} className="rounded-xl bg-white/3 px-2 py-2.5 text-center transition-colors hover:bg-white/6">
+                <div className="text-[9px] font-bold uppercase tracking-wider text-fog">{f.label}</div>
+                <div className="mt-0.5 font-display text-sm font-extrabold tabular-nums">
+                  {current[f.k]}
+                  <span className="text-[10px] text-fog"> {f.unit}</span>
                 </div>
-              )}
-              <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
-                пропорции меняются по твоим замерам
-              </div>
-            </div>
-
-            <div className="pointer-events-none absolute left-4 top-4 rounded-2xl border border-white/10 bg-night-900/70 px-3.5 py-2.5 backdrop-blur-sm">
-              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-fog">Твоё тело сейчас</div>
-              <div className="mt-1 font-display text-lg font-extrabold">
-                {current.weight} кг <span className="text-xs font-bold text-fog">· {current.height} см</span>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-2 border-t border-white/8 p-4 sm:grid-cols-7">
-            {MEASURE_FIELDS.map((f) => {
-              const d = delta(f.k);
-              const neutral = f.k === "height";
-              const good = d !== null && d !== 0 && (goodWhenDown.includes(f.k) ? d < 0 : d > 0);
-              return (
-                <div key={f.k} className="rounded-xl bg-white/3 px-2 py-2 text-center">
-                  <div className="text-[9px] font-bold uppercase tracking-wider text-fog">{f.label}</div>
-                  <div className="mt-0.5 font-display text-sm font-extrabold tabular-nums">
-                    {current[f.k]}
-                    <span className="text-[10px] text-fog"> {f.unit}</span>
+                {!neutral && d !== null && d !== 0 && (
+                  <div className={`text-[10px] font-bold ${good ? "text-mint" : "text-coral"}`}>
+                    {d > 0 ? "+" : ""}
+                    {Math.round(d * 10) / 10}
                   </div>
-                  {!neutral && d !== null && d !== 0 && (
-                    <div className={`text-[10px] font-bold ${good ? "text-mint" : "text-coral"}`}>
-                      {d > 0 ? "+" : ""}
-                      {Math.round(d * 10) / 10}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-        {/* form + history */}
-        <div className="flex flex-col gap-5">
+      <div className="grid items-start gap-5 lg:grid-cols-2">
           <section className="reveal on rounded-3xl border border-white/10 bg-night-800/80 p-5" style={{ animationDelay: "0.06s" }}>
             <h2 className="font-display text-lg font-extrabold">Новый замер</h2>
             <div className="mt-4">
@@ -236,6 +214,7 @@ export default function ProfilePage({
             </button>
           </section>
 
+          <div className="flex flex-col gap-5">
           <section className="reveal on rounded-3xl border border-white/10 bg-night-800/80 p-5" style={{ animationDelay: "0.12s" }}>
             <h2 className="font-display text-lg font-extrabold">Динамика веса</h2>
             <div className="mt-3">
@@ -246,7 +225,7 @@ export default function ProfilePage({
           <section className="reveal on rounded-3xl border border-white/10 bg-night-800/80 p-5" style={{ animationDelay: "0.18s" }}>
             <h2 className="font-display text-lg font-extrabold">История замеров</h2>
             {measures.length === 0 ? (
-              <p className="mt-3 text-sm text-fog">Пока пусто — сохрани первый замер, и модель построится по твоим пропорциям.</p>
+              <p className="mt-3 text-sm text-fog">Пока пусто — сохрани первый замер, чтобы отслеживать динамику.</p>
             ) : (
               <ul className="nice-scroll mt-3 max-h-64 space-y-2 overflow-y-auto pr-1">
                 {[...measures].reverse().map((m, ri) => {

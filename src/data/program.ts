@@ -705,19 +705,6 @@ export const BASE_MEASURE: Omit<Measure, "date"> = {
   arm: 28,
 };
 
-/* ================== body scale (пропорции фигуры) ================== */
-
-export interface BodyScale {
-  chest: number;
-  waist: number;
-  hips: number;
-  thigh: number;
-  arm: number;
-  height?: number; // множитель роста ~1
-}
-
-export const DEFAULT_BODY: BodyScale = { chest: 1, waist: 1, hips: 1, thigh: 1, arm: 1, height: 1 };
-
 export const MEASURE_FIELDS: { k: keyof Omit<Measure, "date">; label: string; unit: string; step: number }[] = [
   { k: "weight", label: "Вес", unit: "кг", step: 0.1 },
   { k: "height", label: "Рост", unit: "см", step: 1 },
