@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import type { WorkoutDay, Exercise } from "../data/program";
 import { ZONE_META } from "../data/program";
-import { ExerciseScene } from "./Human3D";
+import RealisticFigure from "./RealisticFigure";
 import BodyMap, { ZoneChips } from "./BodyMap";
 import { IconPause, IconPlay, IconSkip, IconSound, IconX, IconArrowR, IconClock, IconCheck } from "./icons";
 
@@ -193,14 +193,16 @@ export default function WorkoutPlayer({
                     <span className="relative flex h-2 w-2">
                       <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
                     </span>
-                    3D-демо
+                    Реалистичное демо
                   </span>
                   <ZoneChips zones={currentEx?.zones ?? []} />
                 </div>
-                <div className="mx-auto mt-2 h-52 max-w-md sm:h-64 overflow-hidden rounded-2xl bg-night-900/70 sm:h-64">
-                  <ExerciseScene figure={currentEx?.figure ?? "squat"} glows={currentEx?.zones ?? ["glutes"]} className="h-full" />
+                <div className="mt-2">
+                  <RealisticFigure figure={currentEx?.figure ?? "squat"} glows={currentEx?.zones} className="aspect-[4/3] w-full" />
                 </div>
-                <p className="mt-2 text-center text-[11px] text-fog/80">Модель можно вращать пальцем — рабочие зоны подсвечены</p>
+                <p className="mt-2 text-center text-[11px] text-fog/80">
+                  Рабочая мышца подсвечена мягким светом · зоны показаны на силуэте рядом
+                </p>
                 {currentEx && (
                   <div className="rounded-2xl border border-white/8 bg-white/4 px-4 py-3">
                     <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-peach">Главное</div>

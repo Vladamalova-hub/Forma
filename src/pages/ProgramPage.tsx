@@ -9,7 +9,7 @@ import {
   type Exercise,
   type DaySlot,
 } from "../data/program";
-import { ExerciseScene } from "../components/Human3D";
+import RealisticFigure from "../components/RealisticFigure";
 import { ZoneChips } from "../components/BodyMap";
 import { IconPlay, IconCheck, IconClock, IconArrowR, IconBell } from "../components/icons";
 
@@ -110,10 +110,8 @@ function DayCard({
 
 function ExerciseDetail({ ex, accent }: { ex: Exercise; accent: string }) {
   return (
-    <div className="mx-3 mb-3 grid gap-4 rounded-2xl border border-white/8 bg-white/3 p-4 sm:grid-cols-[220px_1fr]">
-      <div className="h-44 overflow-hidden rounded-xl bg-night-900/80">
-        <ExerciseScene figure={ex.figure} glows={ex.zones} className="h-full" />
-      </div>
+    <div className="mx-3 mb-3 grid gap-4 rounded-2xl border border-white/8 bg-white/3 p-4 sm:grid-cols-[240px_1fr]">
+      <RealisticFigure figure={ex.figure} glows={ex.zones} className="aspect-[4/3] w-full sm:aspect-auto sm:h-44" />
       <div>
         <div className="rounded-xl border border-peach/20 bg-peach/8 px-3.5 py-2.5">
           <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-peach">Главное</span>

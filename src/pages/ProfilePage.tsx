@@ -2,7 +2,9 @@ import React, { useMemo, useState } from "react";
 import { BASE_MEASURE, MEASURE_FIELDS, type Measure } from "../data/program";
 import { ProfileScene } from "../components/Human3D";
 import type { BodyScale } from "../components/Human3D";
-import { IconPlus, IconMinus, IconTrash, IconCheck, IconSparkle } from "../components/icons";
+import { BODY_PHOTO, BODY_GUIDES } from "../data/figures";
+import { ZONE_META } from "../data/program";
+import { IconPlus, IconMinus, IconTrash, IconCheck, IconSparkle, IconBody, IconGlobe } from "../components/icons";
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -82,6 +84,7 @@ export default function ProfilePage({
     latest ? { ...latest, date: undefined as unknown as string } as Omit<Measure, "date"> : { ...BASE_MEASURE }
   );
   const [saved, setSaved] = useState(false);
+  const [view, setView] = useState<"photo" | "3d">("photo");
 
   const current: Omit<Measure, "date"> = latest ?? BASE_MEASURE;
   const body = useMemo(() => toBody(current), [latest]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -105,26 +108,84 @@ export default function ProfilePage({
       <div className="reveal on">
         <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Профиль и прогресс</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
-          Замеры — самый честный индикатор. Талия и бёдра скажут больше, чем весы. 3D-модель справа повторяет твои пропорции: призрак — первый замер, фигура — текущий.
+          Замеры — самый честный индикатор: талия и бёдра скажут больше, чем весы. Смотри на себя в двух режимах: реалистичное фото с линиями замеров и 3D-модель, которая в точности повторяет твои пропорции (призрак — первый замер, фигура — текущий).
         </p>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,440px)_1fr]">
-        {/* 3D model */}
+        {/* body: realistic photo + 3D */}
         <section className="reveal on overflow-hidden rounded-3xl border border-white/10 bg-night-800/80">
+          <div className="flex items-center justify-between gap-2 border-b border-white/8 px-4 py-3">
+            <div className="flex rounded-full border border-white/10 bg-night-900/60 p-1">
+              <button
+                onClick={() => setView("photo")}
+                className={`btn-press flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors ${
+                  view === "photo" ? "bg-coral text-night-950" : "text-fog hover:text-ink"
+                }`}
+              >
+                <IconBody className="h-3.5 w-3.5" /> Реалистично
+              </button>
+              <button
+                onClick={() => setView("3d")}
+                className={`btn-press flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors ${
+                  view === "3d" ? "bg-coral text-night-950" : "text-fog hover:text-ink"
+                }`}
+              >
+                <IconGlobe className="h-3.5 w-3.5" /> 3D-модель
+              </button>
+            </div>
+            <span className="hidden text-[10px] uppercase tracking-wider text-fog sm:block">
+              {view === "photo" ? "ориентир по зонам" : "повторяет твои пропорции"}
+            </span>
+          </div>
+
           <div className="relative h-[420px] sm:h-[480px]">
-            <ProfileScene body={body} ghost={ghost} className="h-full" />
+            {view === "photo" ? (
+              <div className="relative h-full">
+                <img
+                  src={BODY_PHOTO}
+                  alt="Реалистичная фигура"
+                  className="h-full w-full object-cover object-top"
+                  draggable={false}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night-900/60 via-transparent to-night-900/20" />
+                {/* measurement guides */}
+                {BODY_GUIDES.map((g, gi) => (
+                  <div key={g.label} className="rise-in pointer-events-none absolute inset-x-0" style={{ top: `${g.y}%`, animationDelay: `${gi * 0.08}s` }}>
+                    <div className="relative flex items-center">
+                      <div className="h-px flex-1 border-t border-dashed" style={{ borderColor: `${ZONE_META[g.zone].color}99` }} />
+                      <div
+                        className="flex items-center gap-2 rounded-full border px-3 py-1.5 backdrop-blur-sm"
+                        style={{ borderColor: `${ZONE_META[g.zone].color}66`, background: "rgba(18,13,23,0.72)" }}
+                      >
+                        <span className="h-2 w-2 rounded-full" style={{ background: ZONE_META[g.zone].color, boxShadow: `0 0 8px ${ZONE_META[g.zone].color}` }} />
+                        <span className="text-[11px] font-semibold text-ink">{g.label}</span>
+                        <span className="font-display text-[11px] font-extrabold tabular-nums" style={{ color: ZONE_META[g.zone].color }}>
+                          {g.label === "Грудь" ? current.chest : g.label === "Талия" ? current.waist : current.hips} см
+                        </span>
+                      </div>
+                      <div className="w-4" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <ProfileScene body={body} ghost={ghost} className="h-full" />
+                {ghost && (
+                  <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
+                    <span className="h-2.5 w-2.5 rounded-full bg-lilac/50" /> призрак — первый замер
+                  </div>
+                )}
+                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
+                  вращай пальцем · колесо — зум
+                </div>
+              </>
+            )}
+
             <div className="pointer-events-none absolute left-4 top-4 rounded-2xl border border-white/10 bg-night-900/70 px-3.5 py-2.5 backdrop-blur-sm">
               <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-fog">Твоё тело сейчас</div>
               <div className="mt-1 font-display text-lg font-extrabold">{current.weight} кг</div>
-            </div>
-            {ghost && (
-              <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
-                <span className="h-2.5 w-2.5 rounded-full bg-lilac/50" /> призрак — первый замер
-              </div>
-            )}
-            <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
-              вращай пальцем · колесо — зум
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2 border-t border-white/8 p-4 sm:grid-cols-6">
