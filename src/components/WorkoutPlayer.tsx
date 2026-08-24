@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import type { WorkoutDay, Exercise } from "../data/program";
 import { ZONE_META } from "../data/program";
-import RealisticFigure from "./RealisticFigure";
+import TechniqueVideo from "./TechniqueVideo";
 import BodyMap, { ZoneChips } from "./BodyMap";
 import { IconPause, IconPlay, IconSkip, IconSound, IconX, IconArrowR, IconClock, IconCheck } from "./icons";
 
@@ -187,24 +187,15 @@ export default function WorkoutPlayer({
           <div className="mt-6 grid flex-1 gap-5 lg:grid-cols-[1.15fr_1fr]">
             {/* demo panel */}
             <div className="rise-in flex flex-col gap-4">
-              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-night-800/80 p-4">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-coral/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
-                    <span className="relative flex h-2 w-2">
-                      <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
-                    </span>
-                    Реалистичное демо
-                  </span>
-                  <ZoneChips zones={currentEx?.zones ?? []} />
-                </div>
-                <div className="mt-2">
-                  <RealisticFigure figure={currentEx?.figure ?? "squat"} glows={currentEx?.zones} className="aspect-[4/3] w-full" />
-                </div>
-                <p className="mt-2 text-center text-[11px] text-fog/80">
-                  Рабочая мышца подсвечена мягким светом · зоны показаны на силуэте рядом
-                </p>
+              <div className="min-w-0">
+                <ZoneChips zones={currentEx?.zones ?? []} className="mb-2.5" />
+                <TechniqueVideo
+                  figure={currentEx?.figure ?? "squat"}
+                  glows={currentEx?.zones ?? ["glutes"]}
+                  name={currentEx?.name}
+                />
                 {currentEx && (
-                  <div className="rounded-2xl border border-white/8 bg-white/4 px-4 py-3">
+                  <div className="mt-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3">
                     <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-peach">Главное</div>
                     <p className="mt-1 text-sm font-medium leading-snug">{currentEx.cue}</p>
                   </div>
@@ -212,11 +203,11 @@ export default function WorkoutPlayer({
               </div>
 
               {/* body map */}
-              <div className="flex items-center gap-5 rounded-3xl border border-white/10 bg-night-800/60 p-4">
-                <div className="h-44 shrink-0">
+              <div className="flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-night-800/60 p-4 sm:flex-row sm:gap-5">
+                <div className="h-40 shrink-0 sm:h-44">
                   <BodyMap view="both" zones={currentEx?.zones ?? []} />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 sm:text-left">
                   <div className="font-display text-xs font-bold uppercase tracking-[0.2em] text-fog">Зоны в работе</div>
                   <div className="mt-3 space-y-2">
                     {Array.from(new Set(currentEx?.zones ?? [])).map((z) => (

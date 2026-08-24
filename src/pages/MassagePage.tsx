@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MASSAGE_STEPS, MASSAGE_TOTAL } from "../data/program";
-import BodyMap from "../components/BodyMap";
 import { ZoneChips } from "../components/BodyMap";
+import MassageVideoDemo from "../components/MassageVideoDemo";
 import { IconPlay, IconPause, IconCheck, IconFlame, IconSkip, IconHands, IconClock } from "../components/icons";
 
 export default function MassagePage({
@@ -87,23 +87,15 @@ export default function MassagePage({
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[auto_1fr]">
-        {/* body map */}
-        <section className="reveal on relative flex flex-col items-center rounded-3xl border border-white/10 bg-night-800/80 p-6">
-          <div className="h-80">
-            <BodyMap
-              view="front"
-              zones={["belly"]}
-              overlay={
-                <g className="spin-slow">
-                  <circle cx="60" cy="127" r="22" fill="none" stroke="#7FD8B0" strokeWidth="1.4" strokeDasharray="4 6" opacity="0.9" />
-                  <path d="M54 103 L66 105 L57 112 Z" fill="#7FD8B0" />
-                </g>
-              }
-            />
-          </div>
-          <div className="mt-3 flex items-center gap-2 text-xs text-fog">
-            <IconHands className="h-4 w-4 text-mint" /> Все движения — строго по часовой стрелке
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,480px)_1fr]">
+        {/* video technique */}
+        <section className="reveal on flex min-w-0 flex-col gap-3">
+          <MassageVideoDemo />
+          <div className="flex items-start gap-2.5 rounded-2xl border border-white/10 bg-night-800/70 px-4 py-3">
+            <IconHands className="mt-0.5 h-4 w-4 shrink-0 text-mint" />
+            <p className="text-xs leading-relaxed text-fog">
+              Все движения — строго <span className="font-semibold text-mint">по часовой стрелке</span>, по ходу кишечника. Давление мягкое, без боли. Смотри на руки в видео и повторяй.
+            </p>
           </div>
         </section>
 

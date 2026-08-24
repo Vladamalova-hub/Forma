@@ -249,12 +249,17 @@ function Rig({
   body = DEFAULT_BODY,
   glows = [],
   ghost = false,
+  paused = false,
 }: {
   poseFn: PoseFn;
   body?: BodyScale;
   glows?: ZoneId[];
   ghost?: boolean;
+  paused?: boolean;
 }) {
+  const timeRef = useRef(0);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
   const root = useRef<THREE.Group>(null);
   const hipL = useRef<THREE.Group>(null);
   const hipR = useRef<THREE.Group>(null);
@@ -285,8 +290,9 @@ function Rig({
     [body]
   );
 
-  useFrame(({ clock }) => {
-    const p = poseFn(clock.getElapsedTime());
+  useFrame((_, delta) => {
+    if (!pausedRef.current) timeRef.current += Math.min(delta, 0.1);
+    const p = poseFn(timeRef.current);
     if (root.current) {
       root.current.position.set(p.pos[0], p.pos[1], p.pos[2]);
       root.current.rotation.order = "YXZ";
@@ -491,19 +497,21 @@ export function ExerciseScene({
   body,
   className = "",
   spin = false,
+  paused = false,
 }: {
   figure: FigureId;
   glows: ZoneId[];
   body?: BodyScale;
   className?: string;
   spin?: boolean;
+  paused?: boolean;
 }) {
   return (
     <div className={className}>
       <Canvas dpr={[1, 1.75]} camera={{ position: [1.7, 1.4, 3.0], fov: 36 }} gl={{ antialias: true, alpha: true }}>
         <Lights />
         <group position={[0, -0.82, 0]}>
-          <Rig poseFn={FIGURES[figure]} glows={glows} body={body} />
+          <Rig poseFn={FIGURES[figure]} glows={glows} body={body} paused={paused} />
           <Floor />
           <ContactShadows opacity={0.55} scale={4} blur={2.5} far={2.2} resolution={256} color="#000000" />
         </group>

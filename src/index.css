@@ -23,6 +23,7 @@
 
 html {
   color-scheme: dark;
+  overflow-x: clip;
 }
 
 body {
@@ -31,6 +32,58 @@ body {
   color: var(--color-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  max-width: 100vw;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+button, input, [role="button"] {
+  touch-action: manipulation;
+}
+
+.safe-bottom {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* video-shell: pausing all inner animations */
+[data-vp-paused="true"] .vp-anim,
+[data-vp-paused="true"] .vp-anim * {
+  animation-play-state: paused !important;
+}
+
+@keyframes vpSpin {
+  to { transform: rotate(360deg); }
+}
+.vp-orbit {
+  animation: vpSpin 5s linear infinite;
+  transform-box: view-box;
+  transform-origin: 160px 100px;
+}
+.vp-counter {
+  animation: vpSpin 5s linear infinite reverse;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.vp-forward {
+  animation: vpSpin 5s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes vpBelly {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.022); }
+}
+.vp-belly {
+  animation: vpBelly 5s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 160px 100px;
 }
 
 ::selection {

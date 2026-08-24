@@ -435,8 +435,8 @@ export default function App() {
       </main>
 
       {/* bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-night-900/92 backdrop-blur-md">
-        <div className="mx-auto grid max-w-6xl grid-cols-6 px-2">
+      <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-night-900/92 backdrop-blur-md">
+        <div className="mx-auto grid max-w-6xl grid-cols-6 px-1 sm:px-2">
           {(
             [
               ["home", "Главная", IconHome],
@@ -450,13 +450,13 @@ export default function App() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`btn-press flex flex-col items-center gap-1 py-2.5 text-[10px] font-semibold transition-colors ${
+              className={`btn-press relative flex min-w-0 flex-col items-center gap-1 py-2.5 text-[9px] font-semibold leading-none transition-colors sm:text-[10px] ${
                 tab === id ? "text-coral" : "text-fog hover:text-ink"
               }`}
             >
               <Icon className="h-5 w-5" strokeWidth={tab === id ? 2.2 : 1.8} />
-              <span className="hidden xs:block sm:block">{label}</span>
-              {tab === id && <span className="absolute bottom-1 h-1 w-1 rounded-full bg-coral" />}
+              <span className="w-full truncate text-center">{label}</span>
+              {tab === id && <span className="absolute bottom-0.5 h-1 w-1 rounded-full bg-coral" />}
             </button>
           ))}
         </div>

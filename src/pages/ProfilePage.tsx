@@ -2,8 +2,7 @@ import React, { useMemo, useState } from "react";
 import { BASE_MEASURE, MEASURE_FIELDS, type Measure } from "../data/program";
 import { ProfileScene } from "../components/Human3D";
 import type { BodyScale } from "../components/Human3D";
-import { BODY_PHOTO, BODY_GUIDES } from "../data/figures";
-import { ZONE_META } from "../data/program";
+import MorphFigure from "../components/MorphFigure";
 import { IconPlus, IconMinus, IconTrash, IconCheck, IconSparkle, IconBody, IconGlobe } from "../components/icons";
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
@@ -123,7 +122,7 @@ export default function ProfilePage({
                   view === "photo" ? "bg-coral text-night-950" : "text-fog hover:text-ink"
                 }`}
               >
-                <IconBody className="h-3.5 w-3.5" /> Реалистично
+                <IconBody className="h-3.5 w-3.5" /> Фигура
               </button>
               <button
                 onClick={() => setView("3d")}
@@ -135,39 +134,28 @@ export default function ProfilePage({
               </button>
             </div>
             <span className="hidden text-[10px] uppercase tracking-wider text-fog sm:block">
-              {view === "photo" ? "ориентир по зонам" : "повторяет твои пропорции"}
+              {view === "photo" ? "меняется с каждым замером" : "повторяет твои пропорции"}
             </span>
           </div>
 
           <div className="relative h-[420px] sm:h-[480px]">
             {view === "photo" ? (
-              <div className="relative h-full">
-                <img
-                  src={BODY_PHOTO}
-                  alt="Реалистичная фигура"
-                  className="h-full w-full object-cover object-top"
-                  draggable={false}
+              <div className="rise-in relative flex h-full items-center justify-center overflow-hidden">
+                <MorphFigure
+                  key={`${current.chest}-${current.waist}-${current.hips}-${current.thigh}-${current.arm}`}
+                  body={body}
+                  ghost={ghost}
+                  guides={{ chest: current.chest, waist: current.waist, hips: current.hips }}
+                  className="h-full max-w-full"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night-900/60 via-transparent to-night-900/20" />
-                {/* measurement guides */}
-                {BODY_GUIDES.map((g, gi) => (
-                  <div key={g.label} className="rise-in pointer-events-none absolute inset-x-0" style={{ top: `${g.y}%`, animationDelay: `${gi * 0.08}s` }}>
-                    <div className="relative flex items-center">
-                      <div className="h-px flex-1 border-t border-dashed" style={{ borderColor: `${ZONE_META[g.zone].color}99` }} />
-                      <div
-                        className="flex items-center gap-2 rounded-full border px-3 py-1.5 backdrop-blur-sm"
-                        style={{ borderColor: `${ZONE_META[g.zone].color}66`, background: "rgba(18,13,23,0.72)" }}
-                      >
-                        <span className="h-2 w-2 rounded-full" style={{ background: ZONE_META[g.zone].color, boxShadow: `0 0 8px ${ZONE_META[g.zone].color}` }} />
-                        <span className="text-[11px] font-semibold text-ink">{g.label}</span>
-                        <span className="font-display text-[11px] font-extrabold tabular-nums" style={{ color: ZONE_META[g.zone].color }}>
-                          {g.label === "Грудь" ? current.chest : g.label === "Талия" ? current.waist : current.hips} см
-                        </span>
-                      </div>
-                      <div className="w-4" />
-                    </div>
+                {ghost && (
+                  <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
+                    <span className="h-2.5 w-2.5 rounded-full border border-dashed border-lilac/70" /> пунктир — первый замер
                   </div>
-                ))}
+                )}
+                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
+                  пропорции меняются по твоим замерам
+                </div>
               </div>
             ) : (
               <>
