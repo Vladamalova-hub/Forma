@@ -10,7 +10,7 @@ import {
   type Exercise,
   type DaySlot,
 } from "../data/program";
-import TechniqueVideo from "../components/TechniqueVideo";
+import TechniqueDemo from "../components/TechniqueDemo";
 import WorkoutLibrary from "../components/WorkoutLibrary";
 import { ZoneChips } from "../components/BodyMap";
 import { IconPlay, IconCheck, IconClock, IconArrowR, IconBell } from "../components/icons";
@@ -113,7 +113,7 @@ function DayCard({
 function ExerciseDetail({ ex, accent }: { ex: Exercise; accent: string }) {
   return (
     <div className="mx-1 mb-3 grid gap-4 rounded-2xl border border-white/8 bg-white/3 p-3 sm:mx-3 sm:grid-cols-[260px_1fr] sm:p-4">
-      <TechniqueVideo figure={ex.figure} glows={ex.zones} name={ex.name} accent={accent} />
+      <TechniqueDemo name={ex.name} zones={ex.zones} videoUrl={ex.videoUrl} />
       <div className="min-w-0">
         <div className="rounded-xl border border-peach/20 bg-peach/8 px-3.5 py-2.5">
           <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-peach">Главное</span>

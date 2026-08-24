@@ -1,9 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { BASE_MEASURE, MEASURE_FIELDS, type Measure } from "../data/program";
-import { ProfileScene } from "../components/Human3D";
-import type { BodyScale } from "../components/Human3D";
+import { BASE_MEASURE, MEASURE_FIELDS, type BodyScale, type Measure } from "../data/program";
 import MorphFigure from "../components/MorphFigure";
-import { IconPlus, IconMinus, IconTrash, IconCheck, IconSparkle, IconBody, IconGlobe } from "../components/icons";
+import { IconPlus, IconMinus, IconTrash, IconCheck, IconSparkle } from "../components/icons";
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -86,7 +84,6 @@ export default function ProfilePage({
       : { ...BASE_MEASURE }
   );
   const [saved, setSaved] = useState(false);
-  const [view, setView] = useState<"photo" | "3d">("photo");
 
   const current: Omit<Measure, "date"> = latest ? { ...BASE_MEASURE, ...latest } : BASE_MEASURE;
   const body = useMemo(() => toBody(current), [latest]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -110,69 +107,38 @@ export default function ProfilePage({
       <div className="reveal on text-center">
         <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Профиль и прогресс</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
-          Замеры — самый честный индикатор: талия и бёдра скажут больше, чем весы. Смотри на себя в двух режимах: реалистичное фото с линиями замеров и 3D-модель, которая в точности повторяет твои пропорции (призрак — первый замер, фигура — текущий).
+          Замеры — самый честный индикатор: талия и бёдра скажут больше, чем весы. Фигура ниже строится по твоим замерам и меняется с каждым сохранением: пунктирный силуэт — твой первый замер, цветная фигура — текущий. Так прогресс виден наглядно.
         </p>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,440px)_1fr]">
-        {/* body: realistic photo + 3D */}
+        {/* body: морфящаяся фигура по замерам */}
         <section className="reveal on overflow-hidden rounded-3xl border border-white/10 bg-night-800/80">
-          <div className="flex items-center justify-between gap-2 border-b border-white/8 px-4 py-3">
-            <div className="flex rounded-full border border-white/10 bg-night-900/60 p-1">
-              <button
-                onClick={() => setView("photo")}
-                className={`btn-press flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors ${
-                  view === "photo" ? "bg-coral text-night-950" : "text-fog hover:text-ink"
-                }`}
-              >
-                <IconBody className="h-3.5 w-3.5" /> Фигура
-              </button>
-              <button
-                onClick={() => setView("3d")}
-                className={`btn-press flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors ${
-                  view === "3d" ? "bg-coral text-night-950" : "text-fog hover:text-ink"
-                }`}
-              >
-                <IconGlobe className="h-3.5 w-3.5" /> 3D-модель
-              </button>
-            </div>
-            <span className="hidden text-[10px] uppercase tracking-wider text-fog sm:block">
-              {view === "photo" ? "меняется с каждым замером" : "повторяет твои пропорции"}
+          <div className="flex items-center justify-center gap-2 border-b border-white/8 px-4 py-3">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
             </span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-fog">Фигура по твоим замерам · обновляется с каждым сохранением</span>
           </div>
 
           <div className="relative h-[420px] sm:h-[480px]">
-            {view === "photo" ? (
-              <div className="rise-in relative flex h-full items-center justify-center overflow-hidden">
-                <MorphFigure
-                  key={`${current.chest}-${current.waist}-${current.hips}-${current.thigh}-${current.arm}`}
-                  body={body}
-                  ghost={ghost}
-                  guides={{ chest: current.chest, waist: current.waist, hips: current.hips }}
-                  className="h-full max-w-full"
-                />
-                {ghost && (
-                  <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
-                    <span className="h-2.5 w-2.5 rounded-full border border-dashed border-lilac/70" /> пунктир — первый замер
-                  </div>
-                )}
-                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
-                  пропорции меняются по твоим замерам
+            <div className="rise-in relative flex h-full items-center justify-center overflow-hidden">
+              <MorphFigure
+                key={`${current.chest}-${current.waist}-${current.hips}-${current.thigh}-${current.arm}-${current.height}`}
+                body={body}
+                ghost={ghost}
+                guides={{ chest: current.chest, waist: current.waist, hips: current.hips }}
+                className="h-full max-w-full"
+              />
+              {ghost && (
+                <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
+                  <span className="h-2.5 w-2.5 rounded-full border border-dashed border-lilac/70" /> пунктир — первый замер
                 </div>
+              )}
+              <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
+                пропорции меняются по твоим замерам
               </div>
-            ) : (
-              <>
-                <ProfileScene body={body} ghost={ghost} className="h-full" />
-                {ghost && (
-                  <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 rounded-full border border-lilac/30 bg-night-900/70 px-3 py-1.5 text-[11px] text-lilac backdrop-blur-sm">
-                    <span className="h-2.5 w-2.5 rounded-full bg-lilac/50" /> призрак — первый замер
-                  </div>
-                )}
-                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-night-900/70 px-3.5 py-1.5 text-[10px] uppercase tracking-wider text-fog backdrop-blur-sm">
-                  вращай пальцем · колесо — зум
-                </div>
-              </>
-            )}
+            </div>
 
             <div className="pointer-events-none absolute left-4 top-4 rounded-2xl border border-white/10 bg-night-900/70 px-3.5 py-2.5 backdrop-blur-sm">
               <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-fog">Твоё тело сейчас</div>

@@ -205,6 +205,14 @@ export const IconGlobe = (p: P) => (
   </svg>
 );
 
+export const IconLibrary = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4.5 4.5h3v15h-3zM10.5 4.5h3v15h-3z" />
+    <path d="m16.6 5.6 2.9-.8 3 14.2-2.9.8z" />
+    <path d="M4.5 19.5h15" />
+  </svg>
+);
+
 export const IconInstall = (p: P) => (
   <svg {...base(p)}>
     <path d="M12 4v10M7.5 10 12 14.5 16.5 10" />

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import type { WorkoutDay, Exercise } from "../data/program";
 import { ZONE_META } from "../data/program";
-import TechniqueVideo from "./TechniqueVideo";
+import TechniqueDemo from "./TechniqueDemo";
 import BodyMap, { ZoneChips } from "./BodyMap";
 import { IconPause, IconPlay, IconSkip, IconSound, IconX, IconArrowR, IconClock, IconCheck } from "./icons";
 
@@ -188,11 +188,11 @@ export default function WorkoutPlayer({
             {/* demo panel */}
             <div className="rise-in flex flex-col gap-4">
                 <div className="min-w-0">
-                  <ZoneChips zones={currentEx?.zones ?? []} className="mb-2.5 justify-center" />                <TechniqueVideo
-                  figure={currentEx?.figure ?? "squat"}
-                  glows={currentEx?.zones ?? ["glutes"]}
-                  name={currentEx?.name}
-                />
+                  <TechniqueDemo
+                    name={currentEx?.name}
+                    zones={currentEx?.zones ?? ["glutes"]}
+                    videoUrl={currentEx?.videoUrl}
+                  />
                 {currentEx && (
                   <div className="mt-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3">
                     <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-peach">Главное</div>

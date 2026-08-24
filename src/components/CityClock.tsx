@@ -50,10 +50,10 @@ function fmt(date: Date, timeZone?: string, withSeconds = false) {
 }
 
 const WORLD: { tz: string; label: string }[] = [
+  { tz: "Asia/Kamchatka", label: "Петропавловск-Камчатский" },
   { tz: "Europe/Moscow", label: "Москва" },
-  { tz: "Asia/Almaty", label: "Алматы" },
-  { tz: "Europe/Minsk", label: "Минск" },
-  { tz: "Asia/Dubai", label: "Дубай" },
+  { tz: "Asia/Almaty", label: "Шымкент" },
+  { tz: "Asia/Shanghai", label: "Чжоушань" },
 ];
 
 export default function CityClock({ compact = false }: { compact?: boolean }) {

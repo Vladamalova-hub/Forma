@@ -1,5 +1,5 @@
 import React, { useId } from "react";
-import type { BodyScale } from "./Human3D";
+import type { BodyScale } from "../data/program";
 
 const CX = 120;
 

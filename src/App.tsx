@@ -25,6 +25,8 @@ import ProgramPage from "./pages/ProgramPage";
 import MassagePage from "./pages/MassagePage";
 import CalendarPage from "./pages/CalendarPage";
 import ProfilePage from "./pages/ProfilePage";
+import LibraryPage from "./pages/LibraryPage";
+import { useCustomLib } from "./hooks/useCustomLib";
 import {
   IconHome,
   IconDumbbell,
@@ -32,6 +34,7 @@ import {
   IconChat,
   IconCalendar,
   IconUser,
+  IconLibrary,
   IconDrop,
   IconPlus,
   IconSparkle,
@@ -40,7 +43,7 @@ import {
   IconX,
 } from "./components/icons";
 
-type Tab = "home" | "program" | "massage" | "calendar" | "profile" | "ai";
+type Tab = "home" | "program" | "massage" | "calendar" | "library" | "profile" | "ai";
 
 function load<T>(key: string, fallback: T): T {
   try {
@@ -115,6 +118,7 @@ function stopRing() {
 export default function App() {
   const [tab, setTab] = useState<Tab>("home");
   const [player, setPlayer] = useState<WorkoutDay | null>(null);
+  const lib = useCustomLib();
 
   // persisted state
   const [logs, setLogs] = useState<Logs>(() => load("forma-logs-v1", {}));
@@ -419,6 +423,7 @@ export default function App() {
         {tab === "calendar" && (
           <CalendarPage schedule={schedule} logs={logs} streak={massageStreak} onToggle={toggleLog} onStart={startWorkout} />
         )}
+        {tab === "library" && <LibraryPage lib={lib} onStart={startWorkout} />}
         {tab === "profile" && (
           <ProfilePage
             name={name}
@@ -437,13 +442,14 @@ export default function App() {
 
       {/* bottom nav */}
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-night-900/92 backdrop-blur-md">
-        <div className="mx-auto grid max-w-6xl grid-cols-6 px-1 sm:px-2">
+        <div className="mx-auto grid max-w-6xl grid-cols-7 px-0.5 sm:px-2">
           {(
             [
               ["home", "Главная", IconHome],
-              ["program", "Программа", IconDumbbell],
+              ["program", "План", IconDumbbell],
               ["massage", "Массаж", IconHands],
               ["calendar", "Календарь", IconCalendar],
+              ["library", "База", IconLibrary],
               ["profile", "Профиль", IconUser],
               ["ai", "Тренер", IconChat],
             ] as [Tab, string, React.ComponentType<{ className?: string; strokeWidth?: number }>][]
@@ -451,7 +457,7 @@ export default function App() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`btn-press relative flex min-w-0 flex-col items-center gap-1 py-2.5 text-[9px] font-semibold leading-none transition-colors sm:text-[10px] ${
+              className={`btn-press relative flex min-w-0 flex-col items-center gap-1 py-2.5 text-[8.5px] font-semibold leading-none transition-colors sm:text-[10px] ${
                 tab === id ? "text-coral" : "text-fog hover:text-ink"
               }`}
             >
