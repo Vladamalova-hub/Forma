@@ -18,6 +18,7 @@ import {
 } from "./data/program";
 import BodyMap, { ZoneChips } from "./components/BodyMap";
 import CityClock from "./components/CityClock";
+import InstallCard from "./components/InstallCard";
 import WorkoutPlayer from "./components/WorkoutPlayer";
 import AITrainer from "./components/AITrainer";
 import ProgramPage from "./pages/ProgramPage";
@@ -760,6 +761,8 @@ function HomePage({
           <p className="mt-1 text-sm leading-relaxed text-ink/90">{tip}</p>
         </div>
       </section>
+
+      <InstallCard />
     </div>
   );
 }

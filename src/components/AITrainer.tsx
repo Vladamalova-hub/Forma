@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AI_RULES, AI_EXTRA_RULES, AI_FALLBACKS, AI_CHIPS } from "../data/program";
+import { AI_RULES, AI_EXTRA_RULES, AI_EXTRA_RULES2, AI_FALLBACKS, AI_CHIPS } from "../data/program";
 import { IconSend, IconBroom, IconSparkle } from "./icons";
 
 interface Msg {
@@ -11,7 +11,7 @@ const LS_KEY = "forma-chat-v1";
 
 function aiReply(text: string): string {
   const low = text.toLowerCase();
-  for (const rule of [...AI_RULES, ...AI_EXTRA_RULES]) {
+  for (const rule of [...AI_RULES, ...AI_EXTRA_RULES, ...AI_EXTRA_RULES2]) {
     if (rule.keywords.some((k) => low.includes(k.toLowerCase()))) return rule.reply;
   }
   return AI_FALLBACKS[Math.floor(Math.random() * AI_FALLBACKS.length)];

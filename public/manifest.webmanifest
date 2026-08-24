@@ -1,0 +1,48 @@
+{
+  "name": "ФОРМА — тренировки, массаж и AI-тренер",
+  "short_name": "ФОРМА",
+  "description": "Персональный фитнес: 3 тренировки в неделю по твоим дням, ежедневный массаж живота, будильники, замеры и AI-тренер Ника.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#171219",
+  "theme_color": "#171219",
+  "lang": "ru",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Тренировка сегодня",
+      "short_name": "Тренировка",
+      "url": "/",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Массаж живота",
+      "short_name": "Массаж",
+      "url": "/",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}

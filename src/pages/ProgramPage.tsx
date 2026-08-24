@@ -10,6 +10,7 @@ import {
   type DaySlot,
 } from "../data/program";
 import TechniqueVideo from "../components/TechniqueVideo";
+import WorkoutLibrary from "../components/WorkoutLibrary";
 import { ZoneChips } from "../components/BodyMap";
 import { IconPlay, IconCheck, IconClock, IconArrowR, IconBell } from "../components/icons";
 
@@ -251,6 +252,8 @@ export default function ProgramPage({
           <DayCard key={d.id} day={d} done={weekLog.includes(d.id)} onStart={() => onStart(d)} delay={i * 0.08} />
         ))}
       </div>
+
+      <WorkoutLibrary onStart={onStart} />
 
       <div className="reveal on rounded-3xl border border-white/10 bg-night-800/60 p-5">
         <span className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-fog">Дни восстановления</span>
