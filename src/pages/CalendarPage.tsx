@@ -65,8 +65,8 @@ export default function CalendarPage({
 
   return (
     <div className="space-y-5">
-      <div className="reveal on flex flex-wrap items-end justify-between gap-3">
-        <div>
+      <div className="reveal on flex flex-col items-center gap-4 text-center">
+        <div className="flex flex-col items-center">
           <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Календарь</h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
             Дни тренировок настраиваются в «Программе». Здесь отмечай выполненное — тренировки и массаж — и следи за дисциплиной.

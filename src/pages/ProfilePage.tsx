@@ -14,6 +14,7 @@ function toBody(m: Omit<Measure, "date">): BodyScale {
     hips: clamp(m.hips / BASE_MEASURE.hips, 0.7, 1.4),
     thigh: clamp(m.thigh / BASE_MEASURE.thigh, 0.7, 1.4),
     arm: clamp(m.arm / BASE_MEASURE.arm, 0.7, 1.4),
+    height: clamp((m.height || BASE_MEASURE.height) / BASE_MEASURE.height, 0.88, 1.12),
   };
 }
 
@@ -80,12 +81,14 @@ export default function ProfilePage({
   const first = measures[0];
 
   const [form, setForm] = useState<Omit<Measure, "date">>(() =>
-    latest ? { ...latest, date: undefined as unknown as string } as Omit<Measure, "date"> : { ...BASE_MEASURE }
+    latest
+      ? ({ ...BASE_MEASURE, ...latest, date: undefined as unknown as string } as Omit<Measure, "date">)
+      : { ...BASE_MEASURE }
   );
   const [saved, setSaved] = useState(false);
   const [view, setView] = useState<"photo" | "3d">("photo");
 
-  const current: Omit<Measure, "date"> = latest ?? BASE_MEASURE;
+  const current: Omit<Measure, "date"> = latest ? { ...BASE_MEASURE, ...latest } : BASE_MEASURE;
   const body = useMemo(() => toBody(current), [latest]); // eslint-disable-line react-hooks/exhaustive-deps
   const ghost = useMemo(() => (first && measures.length > 1 ? toBody(first) : null), [first, measures.length]);
 
@@ -104,7 +107,7 @@ export default function ProfilePage({
 
   return (
     <div className="space-y-5">
-      <div className="reveal on">
+      <div className="reveal on text-center">
         <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Профиль и прогресс</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
           Замеры — самый честный индикатор: талия и бёдра скажут больше, чем весы. Смотри на себя в двух режимах: реалистичное фото с линиями замеров и 3D-модель, которая в точности повторяет твои пропорции (призрак — первый замер, фигура — текущий).
@@ -173,12 +176,15 @@ export default function ProfilePage({
 
             <div className="pointer-events-none absolute left-4 top-4 rounded-2xl border border-white/10 bg-night-900/70 px-3.5 py-2.5 backdrop-blur-sm">
               <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-fog">Твоё тело сейчас</div>
-              <div className="mt-1 font-display text-lg font-extrabold">{current.weight} кг</div>
+              <div className="mt-1 font-display text-lg font-extrabold">
+                {current.weight} кг <span className="text-xs font-bold text-fog">· {current.height} см</span>
+              </div>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 border-t border-white/8 p-4 sm:grid-cols-6">
+          <div className="grid grid-cols-3 gap-2 border-t border-white/8 p-4 sm:grid-cols-7">
             {MEASURE_FIELDS.map((f) => {
               const d = delta(f.k);
+              const neutral = f.k === "height";
               const good = d !== null && d !== 0 && (goodWhenDown.includes(f.k) ? d < 0 : d > 0);
               return (
                 <div key={f.k} className="rounded-xl bg-white/3 px-2 py-2 text-center">
@@ -187,7 +193,7 @@ export default function ProfilePage({
                     {current[f.k]}
                     <span className="text-[10px] text-fog"> {f.unit}</span>
                   </div>
-                  {d !== null && d !== 0 && (
+                  {!neutral && d !== null && d !== 0 && (
                     <div className={`text-[10px] font-bold ${good ? "text-mint" : "text-coral"}`}>
                       {d > 0 ? "+" : ""}
                       {Math.round(d * 10) / 10}

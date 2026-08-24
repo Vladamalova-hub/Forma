@@ -211,9 +211,10 @@ export interface BodyScale {
   hips: number;
   thigh: number;
   arm: number;
+  height: number;
 }
 
-export const DEFAULT_BODY: BodyScale = { chest: 1, waist: 1, hips: 1, thigh: 1, arm: 1 };
+export const DEFAULT_BODY: BodyScale = { chest: 1, waist: 1, hips: 1, thigh: 1, arm: 1, height: 1 };
 
 const clampS = (v: number, lo = 0.62, hi = 1.5) => Math.min(hi, Math.max(lo, v));
 
@@ -542,8 +543,11 @@ export function ProfileScene({
       <Canvas dpr={[1, 1.75]} camera={{ position: [0.4, 0.35, 2.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
         <Lights />
         <group position={[0, -0.85, 0]}>
-          {ghost && <Rig poseFn={RELAXED} body={ghost} ghost />}
-          <Rig poseFn={RELAXED} body={body} />
+          {/* масштаб по росту, якорь — уровень пола */}
+          <group scale={[1, clampS(body.height ?? 1, 0.88, 1.12), 1]}>
+            {ghost && <Rig poseFn={RELAXED} body={ghost} ghost />}
+            <Rig poseFn={RELAXED} body={body} />
+          </group>
           <Floor radius={0.95} />
           <ContactShadows opacity={0.5} scale={3.4} blur={2.4} far={2} resolution={256} color="#000000" />
         </group>

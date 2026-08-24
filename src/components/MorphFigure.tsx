@@ -167,6 +167,7 @@ export default function MorphFigure({
 }) {
   const ids = useId().replace(/[:]/g, "");
   const d = dims(body);
+  const hs = Math.min(1.12, Math.max(0.88, body.height ?? 1));
 
   const guideRows: { y: number; w: number; color: string; label: string; val?: number }[] = [
     { y: chY, w: d.chW, color: "#FFB084", label: "Грудь", val: guides?.chest },
@@ -199,22 +200,25 @@ export default function MorphFigure({
       </defs>
 
       <ellipse cx={CX} cy={512} rx={48} ry={8} fill="rgba(0,0,0,0.28)" />
-      {ghost && <Figure body={ghost} ids={`${ids}g`} ghost />}
-      <Figure body={body} ids={ids} />
+      {/* масштаб по росту с якорем на уровне стоп */}
+      <g transform={`translate(0 ${520 * (1 - hs)}) scale(1 ${hs})`}>
+        {ghost && <Figure body={ghost} ids={`${ids}g`} ghost />}
+        <Figure body={body} ids={ids} />
 
-      {guides &&
-        guideRows.map((g) => (
-          <g key={g.label}>
-            <line x1={CX - g.w - 14} y1={g.y} x2={CX + g.w + 14} y2={g.y} stroke={g.color} strokeWidth="1.2" strokeDasharray="3 5" opacity="0.85" />
-            <line x1={CX - g.w - 14} y1={g.y - 4} x2={CX - g.w - 14} y2={g.y + 4} stroke={g.color} strokeWidth="1.4" opacity="0.85" />
-            <line x1={CX + g.w + 14} y1={g.y - 4} x2={CX + g.w + 14} y2={g.y + 4} stroke={g.color} strokeWidth="1.4" opacity="0.85" />
-            {g.val !== undefined && (
-              <text x={CX + g.w + 20} y={g.y + 3.5} fill={g.color} fontSize="10.5" fontWeight="700" fontFamily="Golos Text, sans-serif">
-                {g.val} см
-              </text>
-            )}
-          </g>
-        ))}
+        {guides &&
+          guideRows.map((g) => (
+            <g key={g.label}>
+              <line x1={CX - g.w - 14} y1={g.y} x2={CX + g.w + 14} y2={g.y} stroke={g.color} strokeWidth="1.2" strokeDasharray="3 5" opacity="0.85" />
+              <line x1={CX - g.w - 14} y1={g.y - 4} x2={CX - g.w - 14} y2={g.y + 4} stroke={g.color} strokeWidth="1.4" opacity="0.85" />
+              <line x1={CX + g.w + 14} y1={g.y - 4} x2={CX + g.w + 14} y2={g.y + 4} stroke={g.color} strokeWidth="1.4" opacity="0.85" />
+              {g.val !== undefined && (
+                <text x={CX + g.w + 20} y={g.y + 3.5} fill={g.color} fontSize="10.5" fontWeight="700" fontFamily="Golos Text, sans-serif">
+                  {g.val} см
+                </text>
+              )}
+            </g>
+          ))}
+      </g>
     </svg>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
-  WEEK_PLAN,
+  currentWeekPlan,
+  weekSeed,
   ZONE_META,
   DAY_SHORT,
   DAY_FULL,
@@ -35,7 +36,7 @@ function DayCard({
     >
       <div className="grid lg:grid-cols-[230px_1fr]">
         <div
-          className="relative flex flex-row items-center justify-between gap-3 border-b border-white/10 p-5 lg:flex-col lg:items-start lg:border-b-0 lg:border-r"
+          className="relative flex flex-col items-center gap-3 border-b border-white/10 p-5 text-center lg:items-start lg:border-b-0 lg:border-r lg:text-left"
           style={{ background: `linear-gradient(135deg, ${accent}1f, transparent 65%)` }}
         >
           <div>
@@ -50,7 +51,7 @@ function DayCard({
               </span>
             )}
           </div>
-          <div className="flex shrink-0 flex-col items-end gap-3 lg:items-start">
+          <div className="flex shrink-0 flex-col items-center gap-3 lg:items-start">
             <span className="flex items-center gap-1.5 text-xs text-fog">
               <IconClock className="h-4 w-4" /> ~15 мин
             </span>
@@ -65,7 +66,7 @@ function DayCard({
         </div>
 
         <div className="p-3 sm:p-4">
-          <ZoneChips zones={day.zones} className="px-2 pb-3 pt-1" />
+          <ZoneChips zones={day.zones} className="justify-center px-2 pb-3 pt-1 lg:justify-start" />
           <ul>
             {day.exercises.map((ex, i) => (
               <li key={ex.id}>
@@ -157,25 +158,32 @@ export default function ProgramPage({
     onSchedule(schedule.map((s, k) => (k === i ? { ...s, time } : s)));
   };
   const pickedCount = schedule.filter((s) => s.enabled).length;
+  const weekPlan = currentWeekPlan();
+  const weekNo = weekSeed() + 1;
 
   return (
     <div className="space-y-5">
-      <div className="reveal on flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Программа недели</h1>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
-            Выбери свои дни — программа распределит акценты (ягодицы → грудь → талия) и поставит на каждый будильник.
-          </p>
+      <div className="reveal on flex flex-col items-center gap-3 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-1.5">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
+          </span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral">Неделя {weekNo} · новый микс упражнений</span>
         </div>
-        <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-night-800/80 px-4 py-3">
+        <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Программа недели</h1>
+        <p className="max-w-xl text-sm leading-relaxed text-fog">
+          Выбери свои дни — программа распределит акценты (ягодицы → грудь → талия) и поставит на каждый будильник.
+          Каждую неделю упражнения меняются, чтобы мышцы не привыкали.
+        </p>
+        <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-night-800/80 px-5 py-3">
           <span className="font-display text-xl font-extrabold text-coral">{weekLog.length}</span>
-          <span className="text-xs leading-tight text-fog">из {Math.max(pickedCount, 1)}<br />на этой неделе</span>
+          <span className="text-xs leading-tight text-fog">из {Math.max(pickedCount, 1)} тренировок<br />на этой неделе</span>
         </div>
       </div>
 
       {/* day picker + alarms */}
-      <section className="reveal on rounded-3xl border border-white/10 bg-night-800/80 p-5">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+      <section className="reveal on mx-auto w-full max-w-4xl rounded-3xl border border-white/10 bg-night-800/80 p-5">
+        <div className="flex flex-col items-center gap-1.5 text-center">
           <h2 className="flex items-center gap-2 font-display text-lg font-extrabold">
             <IconBell className="h-5 w-5 text-coral" /> Мои дни тренировок
           </h2>
@@ -224,7 +232,7 @@ export default function ProgramPage({
             );
           })}
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-mint/20 bg-mint/8 px-4 py-3">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-mint/20 bg-mint/8 px-4 py-3 text-center">
           <span className="flex items-center gap-2 text-sm font-semibold text-mint">
             <IconBell className="h-4 w-4" /> Утренняя зарядка + вакуум
           </span>
@@ -247,17 +255,17 @@ export default function ProgramPage({
         </div>
       </section>
 
-      <div className="space-y-5">
-        {WEEK_PLAN.map((d, i) => (
+      <div className="mx-auto w-full max-w-4xl space-y-5">
+        {weekPlan.map((d, i) => (
           <DayCard key={d.id} day={d} done={weekLog.includes(d.id)} onStart={() => onStart(d)} delay={i * 0.08} />
         ))}
       </div>
 
       <WorkoutLibrary onStart={onStart} />
 
-      <div className="reveal on rounded-3xl border border-white/10 bg-night-800/60 p-5">
+      <div className="reveal on mx-auto w-full max-w-4xl rounded-3xl border border-white/10 bg-night-800/60 p-5 text-center">
         <span className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-fog">Дни восстановления</span>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fog">
+        <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-fog">
           Без железа, но не без пользы: массаж живота по гиду, прогулка 30+ минут, растяжка 10 минут и вода. Именно в эти дни тело «дозревает» — ягодицы округляются, а талия уходит.
         </p>
       </div>

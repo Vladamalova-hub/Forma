@@ -184,12 +184,11 @@ export default function WorkoutPlayer({
           </div>
 
           {/* main */}
-          <div className="mt-6 grid flex-1 gap-5 lg:grid-cols-[1.15fr_1fr]">
+          <div className="mx-auto mt-6 grid w-full max-w-5xl flex-1 gap-5 lg:grid-cols-[1.15fr_1fr]">
             {/* demo panel */}
             <div className="rise-in flex flex-col gap-4">
-              <div className="min-w-0">
-                <ZoneChips zones={currentEx?.zones ?? []} className="mb-2.5" />
-                <TechniqueVideo
+                <div className="min-w-0">
+                  <ZoneChips zones={currentEx?.zones ?? []} className="mb-2.5 justify-center" />                <TechniqueVideo
                   figure={currentEx?.figure ?? "squat"}
                   glows={currentEx?.zones ?? ["glutes"]}
                   name={currentEx?.name}
@@ -207,7 +206,7 @@ export default function WorkoutPlayer({
                 <div className="h-40 shrink-0 sm:h-44">
                   <BodyMap view="both" zones={currentEx?.zones ?? []} />
                 </div>
-                <div className="min-w-0 sm:text-left">
+                <div className="min-w-0 text-center sm:text-left">
                   <div className="font-display text-xs font-bold uppercase tracking-[0.2em] text-fog">Зоны в работе</div>
                   <div className="mt-3 space-y-2">
                     {Array.from(new Set(currentEx?.zones ?? [])).map((z) => (

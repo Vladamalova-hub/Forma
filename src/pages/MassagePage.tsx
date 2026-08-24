@@ -68,13 +68,13 @@ export default function MassagePage({
 
   return (
     <div className="space-y-5">
-      <div className="reveal on flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <div className="reveal on flex flex-col items-center gap-4 text-center">
+        <div className="flex flex-col items-center">
           <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Массаж живота</h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-fog">
             Каждый день, ~6 минут, лучше утром натощак. Разгоняет лимфу, снимает вздутие, подтягивает кожу и помогает талии становиться уже.
           </p>
-          <ZoneChips zones={["belly", "waist"]} className="mt-3" />
+          <ZoneChips zones={["belly", "waist"]} className="mt-3 justify-center" />
         </div>
         <div className="flex items-center gap-2.5 rounded-2xl border border-mint/25 bg-mint/10 px-4 py-3">
           <span className="flicker text-mint">
@@ -87,7 +87,7 @@ export default function MassagePage({
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,480px)_1fr]">
+      <div className="mx-auto grid w-full max-w-5xl gap-5 lg:grid-cols-[minmax(0,480px)_1fr]">
         {/* video technique */}
         <section className="reveal on flex min-w-0 flex-col gap-3">
           <MassageVideoDemo />

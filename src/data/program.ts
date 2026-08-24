@@ -284,6 +284,185 @@ export const WEEK_PLAN: WorkoutDay[] = [
   },
 ];
 
+/* ============ weekly rotation: pools of exercise variants ============ */
+
+const G = WEEK_PLAN[0].exercises; // plie, bridge, donkey, sideleg
+const C = WEEK_PLAN[1].exercises; // pushup, fly, press, planktap
+const W = WEEK_PLAN[2].exercises; // vacuum, sideplank, crunch, twist
+
+const squatPulse: Exercise = {
+  id: "squatPulse", name: "Присед-пульс", figure: "squat", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["glutes", "legs"],
+  cue: "В нижней точке — мелкие пружинки, не выпрямляйся до конца",
+  tips: ["Опустись до параллели и останься внизу", "Делай маленькие пружинящие движения", "Колени не своди, вес на пятках", "Последние 10 секунд — самые важные"],
+};
+const singleBridge: Exercise = {
+  id: "singleBridge", name: "Мост на одной ноге", figure: "bridge", sets: 3, work: 35, rest: 15,
+  reps: "3 × 35 сек на каждую ногу", zones: ["glutes"],
+  cue: "Вторая нога выпрямлена — вся работа на опорной",
+  tips: ["Одна стопа на полу, вторая вытянута", "Поднимай таз, не заваливай его в сторону", "Дави пяткой опорной ноги", "Меняй ногу в середине подхода"],
+};
+const fireHydrant: Exercise = {
+  id: "fireHydrant", name: "Пожарный гидрант", figure: "donkey", sets: 3, work: 35, rest: 15,
+  reps: "3 × 35 сек на каждую сторону", zones: ["glutes"],
+  cue: "Колено уходит в сторону, корпус неподвижен",
+  tips: ["Стоя на четвереньках, согни ногу 90°", "Отводи колено в сторону до параллели", "Таз не разворачивай", "Опускай медленно и подконтрольно"],
+};
+const legCircle: Exercise = {
+  id: "legCircle", name: "Круги ногой лёжа", figure: "sideleg", sets: 3, work: 40, rest: 15,
+  reps: "3 × 40 сек на каждую сторону", zones: ["glutes", "legs"],
+  cue: "Рисуй ногой маленькие круги — жжение обеспечено",
+  tips: ["Лёжа на боку, подними прямую ногу", "Веди носком небольшие круги", "Половину времени — в одну сторону, половину — в другую", "Корпус не раскачивай"],
+};
+const curtsy: Exercise = {
+  id: "curtsy", name: "Реверанс-выпады", figure: "squat", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["glutes", "legs"],
+  cue: "Шаг назад по диагонали — как в реверансе",
+  tips: ["Заводи ногу назад и за опорную", "Оба колена сгибаются до 90°", "Корпус вертикально", "Средняя ягодичная скажет спасибо"],
+};
+const hipThrust: Exercise = {
+  id: "hipThrust", name: "Хип-траст с паузой", figure: "bridge", sets: 3, work: 45, rest: 15,
+  reps: "3 подхода × 45 сек", zones: ["glutes"],
+  cue: "Три секунды пауза сверху в каждом повторе",
+  tips: ["Лопатки можно опереть о диван — будет сложнее", "Выталкивай таз мощным движением", "В верхней точке сожми ягодицы на 3 счёта", "Подбородок прижат к груди"],
+};
+const kickback: Exercise = {
+  id: "kickback", name: "Кикбэк прямой ногой", figure: "donkey", sets: 3, work: 40, rest: 15,
+  reps: "3 × 40 сек на каждую ногу", zones: ["glutes"],
+  cue: "Нога прямая, пятка тянется назад и вверх",
+  tips: ["На четвереньках выпрями рабочую ногу", "Поднимай её до линии корпуса", "Носок на себя", "Без прогиба в пояснице"],
+};
+const wallSit: Exercise = {
+  id: "wallSit", name: "Стульчик у стены", figure: "squat", sets: 3, work: 45, rest: 20,
+  reps: "3 подхода × 45 сек", zones: ["glutes", "legs"],
+  cue: "Статика жжёт сильнее динамики — выдержи",
+  tips: ["Спина плотно к стене", "Бёдра параллельно полу", "Колени над стопами, не вперёд", "Дыши ровно, не задерживай дыхание"],
+};
+const widePushup: Exercise = {
+  id: "widePushup", name: "Отжимания широким хватом", figure: "pushup", sets: 3, work: 30, rest: 15,
+  reps: "3 подхода × 30 сек", zones: ["chest", "arms"],
+  cue: "Ладони шире плеч — акцент на внешнюю часть груди",
+  tips: ["Поставь ладони в 1,5 раза шире плеч", "Локти разводятся в стороны", "Опускайся до лёгкого касания грудью", "Корпус жёсткий, как струна"],
+};
+const pullover: Exercise = {
+  id: "pullover", name: "Пуловер с бутылками", figure: "fly", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["chest"],
+  cue: "Прямые руки уходят за голову — растягивай грудь",
+  tips: ["Ляг на спину, возьми в руки бутылки с водой", "Подними руки над грудью", "Медленно заведи их за голову", "Верни обратно усилием грудных"],
+};
+const armCircles: Exercise = {
+  id: "armCircles", name: "Круги руками", figure: "fly", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["chest", "arms"],
+  cue: "Руки в стороны — и мелкие круги до жжения",
+  tips: ["Подними прямые руки в стороны", "Делай маленькие быстрые круги", "Через 20 секунд поменяй направление", "Плечи опусти от ушей"],
+};
+const scapula: Exercise = {
+  id: "scapula", name: "Лопаточные отжимания", figure: "pushup", sets: 3, work: 30, rest: 15,
+  reps: "3 подхода × 30 сек", zones: ["back", "chest"],
+  cue: "Руки прямые — двигаются только лопатки",
+  tips: ["Встань в планку на прямых руках", "Сведи лопатки, опустив грудь на 5 см", "Вытолкни себя обратно, разводя лопатки", "Идеально для красивой осанки"],
+};
+const wallPushup: Exercise = {
+  id: "wallPushup", name: "Отжимания от стены", figure: "pushup", sets: 3, work: 35, rest: 15,
+  reps: "3 подхода × 35 сек", zones: ["chest"],
+  cue: "Лёгкая версия — следи за идеальной техникой",
+  tips: ["Ладони на стене на уровне груди", "Отойдите на шаг назад", "Сгибай руки, приближая грудь к стене", "Тело — одна линия"],
+};
+const legRaise: Exercise = {
+  id: "legRaise", name: "Подъёмы ног", figure: "crunch", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["belly"],
+  cue: "Поясница вжата в пол — работает низ живота",
+  tips: ["Ляг на спину, руки вдоль тела", "Поднимай прямые ноги до 90°", "Опускай медленно, не касаясь пола", "Если тяжело — чуть согни колени"],
+};
+const heelTouch: Exercise = {
+  id: "heelTouch", name: "Касание пяток", figure: "crunch", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["waist", "belly"],
+  cue: "Тянись к пяткам — косые мышцы в деле",
+  tips: ["Ляг, согни ноги, лопатки приподняты", "Тянись правой рукой к правой пятке", "Потом левой — к левой", "Двигайся в темпе, но без рывков"],
+};
+const mountain: Exercise = {
+  id: "mountain", name: "Скалолаз", figure: "planktap", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["belly", "waist"],
+  cue: "Быстрые шаги коленями в планке",
+  tips: ["Встань в планку на прямых руках", "Поочерёдно подтягивай колени к груди", "Таз не поднимай вверх", "Держи ровный темп"],
+};
+const sideBend: Exercise = {
+  id: "sideBend", name: "Боковая планка с опусканием", figure: "sideplank", sets: 3, work: 30, rest: 15,
+  reps: "3 × 30 сек на каждую сторону", zones: ["waist"],
+  cue: "Опускай таз почти до пола и поднимай обратно",
+  tips: ["Из боковой планки медленно опустись", "Коснись бедром пола", "Мощно поднимись обратно", "Смени сторону в середине подхода"],
+};
+const bicycle: Exercise = {
+  id: "bicycle", name: "Велосипед", figure: "twist", sets: 3, work: 40, rest: 15,
+  reps: "3 подхода × 40 сек", zones: ["belly", "waist"],
+  cue: "Локоть тянется к противоположному колену",
+  tips: ["Ляг, руки у висков, ноги на весу", "Крути воображаемые педали", "Скручивай корпус на каждое движение", "Шея расслаблена"],
+};
+const plankHold: Exercise = {
+  id: "plankHold", name: "Классическая планка", figure: "planktap", sets: 3, work: 45, rest: 15,
+  reps: "3 подхода × 45 сек", zones: ["belly", "waist"],
+  cue: "Неподвижность — самая сложная часть",
+  tips: ["Локти под плечами", "Тело — одна линия от макушки до пяток", "Ягодицы и пресс в тонусе", "Дыши спокойно и ровно"],
+};
+
+const GLUTES_VARIANTS: Exercise[][] = [
+  [G[0], G[1], G[2], G[3]],
+  [squatPulse, singleBridge, fireHydrant, legCircle],
+  [curtsy, hipThrust, kickback, wallSit],
+];
+const CHEST_VARIANTS: Exercise[][] = [
+  [C[0], C[1], C[2], C[3]],
+  [widePushup, pullover, armCircles, scapula],
+  [wallPushup, armCircles, widePushup, C[3]],
+];
+const WAIST_VARIANTS: Exercise[][] = [
+  [W[0], W[1], W[2], W[3]],
+  [legRaise, heelTouch, mountain, sideBend],
+  [plankHold, bicycle, legRaise, W[3]],
+];
+
+const GLUTES_TAGS = [
+  "Объём, тонус и лифтинг-эффект",
+  "Новый микс: пульс, мост на одной и гидранты",
+  "Реверансы и хип-трасты — ягодицы удивятся",
+];
+const CHEST_TAGS = [
+  "Подтянутый верх и красивая линия",
+  "Пуловеры и круги — свежая нагрузка на грудь",
+  "Широкий хват и лопатки — верх тела в тонусе",
+];
+const WAIST_TAGS = [
+  "Узкая талия и плоский живот",
+  "Подъёмы ног и скалолаз — низ живота в работе",
+  "Велосипед и планка — талия тает",
+];
+
+export function weekSeed(date = new Date()): number {
+  return Math.floor(dayOfYear(date) / 7);
+}
+
+function mulberry32(a: number) {
+  return function () {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** тренировочная программа текущей недели: те же фокусы, но новые упражнения каждую неделю */
+export function currentWeekPlan(date = new Date()): WorkoutDay[] {
+  const seed = weekSeed(date);
+  const pools = [GLUTES_VARIANTS, CHEST_VARIANTS, WAIST_VARIANTS];
+  const tags = [GLUTES_TAGS, CHEST_TAGS, WAIST_TAGS];
+  return WEEK_PLAN.map((base, k) => {
+    const variant = pools[k][(seed + k) % pools[k].length];
+    const rnd = mulberry32(seed * 31 + k * 7 + 5);
+    const exercises = [...variant].sort(() => rnd() - 0.5);
+    return { ...base, tagline: tags[k][seed % tags[k].length], exercises };
+  });
+}
+
 export interface MassageStep {
   name: string;
   sec: number;
@@ -493,7 +672,8 @@ export function workoutForDay(schedule: DaySlot[], dow: number): WorkoutDay | nu
   if (!schedule[dow]?.enabled) return null;
   const picked = schedule.map((s, i) => (s.enabled ? i : -1)).filter((i) => i >= 0);
   const pos = picked.indexOf(dow);
-  return WEEK_PLAN[pos % WEEK_PLAN.length];
+  const plan = currentWeekPlan();
+  return plan[pos % plan.length];
 }
 
 /* ================== profile ================== */
@@ -501,6 +681,7 @@ export function workoutForDay(schedule: DaySlot[], dow: number): WorkoutDay | nu
 export interface Measure {
   date: string; // ISO
   weight: number;
+  height: number;
   chest: number;
   waist: number;
   hips: number;
@@ -510,6 +691,7 @@ export interface Measure {
 
 export const BASE_MEASURE: Omit<Measure, "date"> = {
   weight: 62,
+  height: 166,
   chest: 88,
   waist: 70,
   hips: 96,
@@ -519,6 +701,7 @@ export const BASE_MEASURE: Omit<Measure, "date"> = {
 
 export const MEASURE_FIELDS: { k: keyof Omit<Measure, "date">; label: string; unit: string; step: number }[] = [
   { k: "weight", label: "Вес", unit: "кг", step: 0.1 },
+  { k: "height", label: "Рост", unit: "см", step: 1 },
   { k: "chest", label: "Грудь", unit: "см", step: 0.5 },
   { k: "waist", label: "Талия", unit: "см", step: 0.5 },
   { k: "hips", label: "Бёдра", unit: "см", step: 0.5 },
