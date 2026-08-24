@@ -410,6 +410,29 @@ export const AI_RULES: { keywords: string[]; reply: string }[] = [
   },
 ];
 
+export const AI_EXTRA_RULES: { keywords: string[]; reply: string }[] = [
+  {
+    keywords: ["будил", "уведом", "напомн", "опозд"],
+    reply:
+      "Будильники настраиваются во вкладке «Программа»: выбери свои дни тренировок и время — я разбужу прямо в приложении со звуком и уведомлением. Отдельно есть будильник утренней зарядки с вакуумом. Если проспала — жми «отложить на 10 минут», я позову снова.",
+  },
+  {
+    keywords: ["календ", "отмет", "пропуск", "день трени"],
+    reply:
+      "Загляни во вкладку «Календарь»: там виден весь месяц — точки показывают дни тренировок по плану, галочки — выполненные, зелёные точки — массаж. Отмечай каждый день, и серия массажа будет расти. Пропуск тренировки не катастрофа: просто сделай её на следующий день, план гибкий.",
+  },
+  {
+    keywords: ["замер", "прогресс", "3д", "3D", "модель", "профил", "весы", "взвес"],
+    reply:
+      "Во вкладке «Профиль» сохраняй замеры: вес, грудь, талия, бёдра, бедро, плечо. 3D-модель строится по твоим пропорциям, а призрачный силуэт показывает, с чего ты начинала — так прогресс виден буквально глазами. Взвешивайся 1 раз в неделю утром натощак, а замеры — раз в 2 недели.",
+  },
+  {
+    keywords: ["город", "время", "часовой", "пояс"],
+    reply:
+      "Время на главном экране определяется по твоему часовому поясу автоматически — будильники тоже сработают по местному времени. Там же для ориентира часы Москвы, Алматы, Минска и Дубая.",
+  },
+];
+
 export const AI_FALLBACKS: string[] = [
   "Хороший вопрос! Давай уточним: тебя больше интересует тренировка (ягодицы / грудь / талия), питание, вода или уход за кожей?",
   "Я специализируюсь на твоей программе: 3 тренировки в неделю, массаж живота, вода и кожа. Спроси, например: «Как сузить талию?» или «Когда будет результат?»",
@@ -424,9 +447,85 @@ export const AI_CHIPS: string[] = [
   "Расскажи про массаж живота",
 ];
 
-export function todayKey(d = new Date()): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+/* ================== schedule & alarms ================== */
+
+export const DAY_SHORT = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+export const DAY_FULL = [
+  "Понедельник",
+  "Вторник",
+  "Среда",
+  "Четверг",
+  "Пятница",
+  "Суббота",
+  "Воскресенье",
+];
+
+export interface DaySlot {
+  enabled: boolean;
+  time: string;
 }
+
+export const DEFAULT_SCHEDULE: DaySlot[] = [
+  { enabled: true, time: "18:30" },
+  { enabled: false, time: "18:30" },
+  { enabled: true, time: "18:30" },
+  { enabled: false, time: "18:30" },
+  { enabled: true, time: "18:30" },
+  { enabled: false, time: "18:30" },
+  { enabled: false, time: "19:00" },
+];
+
+/** maps a weekday (0 = Пн) to its workout based on user-chosen training days */
+export function workoutForDay(schedule: DaySlot[], dow: number): WorkoutDay | null {
+  if (!schedule[dow]?.enabled) return null;
+  const picked = schedule.map((s, i) => (s.enabled ? i : -1)).filter((i) => i >= 0);
+  const pos = picked.indexOf(dow);
+  return WEEK_PLAN[pos % WEEK_PLAN.length];
+}
+
+/* ================== profile ================== */
+
+export interface Measure {
+  date: string; // ISO
+  weight: number;
+  chest: number;
+  waist: number;
+  hips: number;
+  thigh: number;
+  arm: number;
+}
+
+export const BASE_MEASURE: Omit<Measure, "date"> = {
+  weight: 62,
+  chest: 88,
+  waist: 70,
+  hips: 96,
+  thigh: 56,
+  arm: 28,
+};
+
+export const MEASURE_FIELDS: { k: keyof Omit<Measure, "date">; label: string; unit: string; step: number }[] = [
+  { k: "weight", label: "Вес", unit: "кг", step: 0.1 },
+  { k: "chest", label: "Грудь", unit: "см", step: 0.5 },
+  { k: "waist", label: "Талия", unit: "см", step: 0.5 },
+  { k: "hips", label: "Бёдра", unit: "см", step: 0.5 },
+  { k: "thigh", label: "Бедро", unit: "см", step: 0.5 },
+  { k: "arm", label: "Плечо", unit: "см", step: 0.5 },
+];
+
+/* ================== dated logs ================== */
+
+export interface DayLog {
+  workoutId?: string;
+  massage?: boolean;
+}
+
+export type Logs = Record<string, DayLog>; // key: YYYY-MM-DD
+
+export const toKey = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+export const todayKey = (d = new Date()) => toKey(d);
 
 export function weekKey(d = new Date()): string {
   const t = new Date(d);

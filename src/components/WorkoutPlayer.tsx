@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import type { WorkoutDay, Exercise } from "../data/program";
 import { ZONE_META } from "../data/program";
-import ExerciseFigure from "./ExerciseFigure";
+import { ExerciseScene } from "./Human3D";
 import BodyMap, { ZoneChips } from "./BodyMap";
 import { IconPause, IconPlay, IconSkip, IconSound, IconX, IconArrowR, IconClock, IconCheck } from "./icons";
 
@@ -54,11 +54,13 @@ export default function WorkoutPlayer({
   onClose,
   onComplete,
   onAskAI,
+  onProfile,
 }: {
   day: WorkoutDay;
   onClose: () => void;
   onComplete: () => void;
   onAskAI: () => void;
+  onProfile?: () => void;
 }) {
   const phases = useMemo(() => buildPhases(day), [day]);
   const totalSec = useMemo(() => phases.reduce((s, p) => s + p.sec, 0), [phases]);
@@ -191,13 +193,14 @@ export default function WorkoutPlayer({
                     <span className="relative flex h-2 w-2">
                       <span className="absolute h-2 w-2 rounded-full bg-coral breathe" />
                     </span>
-                    Видео-демо
+                    3D-демо
                   </span>
                   <ZoneChips zones={currentEx?.zones ?? []} />
                 </div>
-                <div className="mx-auto mt-2 h-52 max-w-md sm:h-64">
-                  <ExerciseFigure figure={currentEx?.figure ?? "squat"} accent={ZONE_META[(currentEx?.zones ?? ["glutes"])[0]].color} />
+                <div className="mx-auto mt-2 h-52 max-w-md sm:h-64 overflow-hidden rounded-2xl bg-night-900/70 sm:h-64">
+                  <ExerciseScene figure={currentEx?.figure ?? "squat"} glows={currentEx?.zones ?? ["glutes"]} className="h-full" />
                 </div>
+                <p className="mt-2 text-center text-[11px] text-fog/80">Модель можно вращать пальцем — рабочие зоны подсвечены</p>
                 {currentEx && (
                   <div className="rounded-2xl border border-white/8 bg-white/4 px-4 py-3">
                     <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-peach">Главное</div>
@@ -365,6 +368,14 @@ export default function WorkoutPlayer({
             >
               На главную <IconArrowR className="h-4 w-4" />
             </button>
+            {onProfile && (
+              <button
+                onClick={onProfile}
+                className="btn-press rounded-full border border-lilac/40 bg-lilac/10 px-7 py-3.5 font-display text-sm font-bold uppercase tracking-wider text-lilac hover:bg-lilac/20"
+              >
+                Записать замер
+              </button>
+            )}
             <button
               onClick={onAskAI}
               className="btn-press rounded-full border border-white/15 bg-white/5 px-7 py-3.5 font-display text-sm font-bold uppercase tracking-wider text-ink hover:bg-white/10"

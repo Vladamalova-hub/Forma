@@ -145,3 +145,62 @@ export const IconBroom = (p: P) => (
     <path d="M14.5 9 8 15.5c-1.5 1.5-3.5 2-4.5 4 2.5.5 4 .5 6-.5s3-2.5 4-4.5L14.5 9Z" />
   </svg>
 );
+
+export const IconCalendar = (p: P) => (
+  <svg {...base(p)}>
+    <rect x="4" y="5.5" width="16" height="15" rx="2.5" />
+    <path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
+    <path d="M8 14h2.5M13.5 14H16M8 17h2.5" />
+  </svg>
+);
+
+export const IconUser = (p: P) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="8" r="3.8" />
+    <path d="M4.5 20c1.2-3.6 4-5.3 7.5-5.3s6.3 1.7 7.5 5.3" />
+  </svg>
+);
+
+export const IconBell = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 4a5.5 5.5 0 0 1 5.5 5.5c0 4.2 1.2 5.6 2 6.5H4.5c.8-.9 2-2.3 2-6.5A5.5 5.5 0 0 1 12 4Z" />
+    <path d="M10 19.5a2 2 0 0 0 4 0M12 2.5V4" />
+  </svg>
+);
+
+export const IconPlus = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 5.5v13M5.5 12h13" />
+  </svg>
+);
+
+export const IconMinus = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M5.5 12h13" />
+  </svg>
+);
+
+export const IconTrash = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M5 7h14M9.5 7V5h5v2M7 7l.8 12.5h8.4L17 7M10.2 10.5v6M13.8 10.5v6" />
+  </svg>
+);
+
+export const IconChevL = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M14.5 6 8.5 12l6 6" />
+  </svg>
+);
+
+export const IconChevR = (p: P) => (
+  <svg {...base(p)}>
+    <path d="m9.5 6 6 6-6 6" />
+  </svg>
+);
+
+export const IconGlobe = (p: P) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M3.5 12h17M12 3.5c2.6 2.4 3.9 5.2 3.9 8.5s-1.3 6.1-3.9 8.5c-2.6-2.4-3.9-5.2-3.9-8.5S9.4 5.9 12 3.5Z" />
+  </svg>
+);

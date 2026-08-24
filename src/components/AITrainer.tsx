@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AI_RULES, AI_FALLBACKS, AI_CHIPS } from "../data/program";
+import { AI_RULES, AI_EXTRA_RULES, AI_FALLBACKS, AI_CHIPS } from "../data/program";
 import { IconSend, IconBroom, IconSparkle } from "./icons";
 
 interface Msg {
@@ -11,15 +11,15 @@ const LS_KEY = "forma-chat-v1";
 
 function aiReply(text: string): string {
   const low = text.toLowerCase();
-  for (const rule of AI_RULES) {
-    if (rule.keywords.some((k) => low.includes(k))) return rule.reply;
+  for (const rule of [...AI_RULES, ...AI_EXTRA_RULES]) {
+    if (rule.keywords.some((k) => low.includes(k.toLowerCase()))) return rule.reply;
   }
   return AI_FALLBACKS[Math.floor(Math.random() * AI_FALLBACKS.length)];
 }
 
 const WELCOME: Msg = {
   role: "bot",
-  text: "Привет! Я Ника, твой AI-тренер. Веду тебя по плану: 3 тренировки в неделю, ежедневный массаж живота, вода и сияющая кожа. Спрашивай о чём угодно — техника, питание, результат.",
+  text: "Привет! Я Ника, твой AI-тренер. Веду тебя по плану: тренировки в выбранные тобой дни (будильники звонят прямо в приложении), ежедневный массаж живота, вода и сияющая кожа. Спрашивай о чём угодно — техника, питание, замеры и 3D-прогресс.",
 };
 
 export default function AITrainer() {
