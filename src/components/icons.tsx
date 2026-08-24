@@ -1,0 +1,147 @@
+import React from "react";
+
+type P = { className?: string; strokeWidth?: number };
+
+const base = (p: P) => ({
+  className: p.className ?? "w-5 h-5",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: p.strokeWidth ?? 1.8,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  viewBox: "0 0 24 24",
+});
+
+export const IconHome = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 11.2 12 4l8 7.2" />
+    <path d="M6 9.5V20h4.5v-5h3v5H18V9.5" />
+  </svg>
+);
+
+export const IconDumbbell = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M7.5 8v8M4.5 9.5v5M16.5 8v8M19.5 9.5v5M7.5 12h9" />
+    <path d="M2.5 11v2M21.5 11v2" />
+  </svg>
+);
+
+export const IconHands = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 21c-4.5-2.6-8-6-8-10.2C4 8 6 6 8.4 6c1.5 0 2.8.8 3.6 2 .8-1.2 2.1-2 3.6-2C18 6 20 8 20 10.8 20 15 16.5 18.4 12 21Z" />
+    <path d="M9 12.5c1 .9 2 1.3 3 1.3s2-.4 3-1.3" />
+  </svg>
+);
+
+export const IconChat = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H12l-4.5 4v-4h-1A2.5 2.5 0 0 1 4 13.5v-7Z" />
+    <path d="M8.5 9h7M8.5 12h4.5" />
+  </svg>
+);
+
+export const IconDrop = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 3.5c3.4 4.2 6 7.4 6 10.6A6 6 0 0 1 6 14.1C6 10.9 8.6 7.7 12 3.5Z" />
+    <path d="M9.3 14.5a2.8 2.8 0 0 0 2 2.6" />
+  </svg>
+);
+
+export const IconFlame = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 21c-3.6 0-6-2.4-6-5.7 0-2.6 1.6-4.4 3-6 .9-1 1.9-2.2 2.3-3.8.1-.5.7-.7 1-.3 1.4 1.6 5.7 5.4 5.7 10.1 0 3.3-2.4 5.7-6 5.7Z" />
+    <path d="M12 21c-1.6 0-2.6-1.3-2.6-2.8 0-1.6 1.3-2.6 2.6-4.2 1.3 1.6 2.6 2.6 2.6 4.2 0 1.5-1 2.8-2.6 2.8Z" />
+  </svg>
+);
+
+export const IconPlay = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M8 5.5v13l10-6.5-10-6.5Z" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const IconPause = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M8.5 5.5v13M15.5 5.5v13" strokeWidth={(p.strokeWidth ?? 1.8) + 1} />
+  </svg>
+);
+
+export const IconSkip = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M6 5.5v13l8-6.5-8-6.5Z" fill="currentColor" stroke="none" />
+    <path d="M17 5.5v13" strokeWidth={(p.strokeWidth ?? 1.8) + 0.6} />
+  </svg>
+);
+
+export const IconRestart = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4.5 9a8 8 0 1 1-1 5" />
+    <path d="M4 4v5h5" />
+  </svg>
+);
+
+export const IconX = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M6 6l12 12M18 6L6 18" />
+  </svg>
+);
+
+export const IconCheck = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M5 12.5 10 17.5 19 7" />
+  </svg>
+);
+
+export const IconSparkle = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 3.5 13.8 9 19.5 11 13.8 13 12 18.5 10.2 13 4.5 11 10.2 9 12 3.5Z" />
+    <path d="M18.5 3.5v3M17 5h3" />
+  </svg>
+);
+
+export const IconSend = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 11.5 20 4l-4.5 16-4-6.5L4 11.5Z" />
+    <path d="M11.5 13.5 20 4" />
+  </svg>
+);
+
+export const IconClock = (p: P) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5V12l3 2" />
+  </svg>
+);
+
+export const IconArrowR = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M5 12h13M13 6.5 18.5 12 13 17.5" />
+  </svg>
+);
+
+export const IconMoon = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M19.5 14A8 8 0 0 1 10 4.5 8 8 0 1 0 19.5 14Z" />
+  </svg>
+);
+
+export const IconBody = (p: P) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="5" r="2.5" />
+    <path d="M12 7.5V14M12 9.5 8 12M12 9.5l4 2.5M12 14l-2.5 6M12 14l2.5 6" />
+  </svg>
+);
+
+export const IconSound = (p: P & { muted?: boolean }) => (
+  <svg {...base(p)}>
+    <path d="M4 10v4h3l4.5 4V6L7 10H4Z" />
+    {p.muted ? <path d="M15.5 9.5 20 14M20 9.5 15.5 14" /> : <path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 7a8 8 0 0 1 0 10" />}
+  </svg>
+);
+
+export const IconBroom = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M19 4.5 13.5 10" />
+    <path d="M14.5 9 8 15.5c-1.5 1.5-3.5 2-4.5 4 2.5.5 4 .5 6-.5s3-2.5 4-4.5L14.5 9Z" />
+  </svg>
+);
