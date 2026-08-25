@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-body: "Golos Text", system-ui, sans-serif;
+
+  --color-night-950: #120d17;
+  --color-night-900: #171219;
+  --color-night-800: #1f1722;
+  --color-night-700: #2a2030;
+  --color-night-600: #382c40;
+
+  --color-ink: #f6efe8;
+  --color-fog: #b3a4bd;
+
+  --color-coral: #ff6d5a;
+  --color-coral-deep: #d94f3e;
+  --color-peach: #ffb084;
+  --color-mint: #7fd8b0;
+  --color-aqua: #6fc6e8;
+  --color-lilac: #c7a6f0;
+}
+
+html {
+  color-scheme: dark;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-night-900);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  max-width: 100vw;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+button, input, [role="button"] {
+  touch-action: manipulation;
+}
+
+.safe-bottom {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* video-shell: pausing all inner animations */
+[data-vp-paused="true"] .vp-anim,
+[data-vp-paused="true"] .vp-anim * {
+  animation-play-state: paused !important;
+}
+
+@keyframes vpSpin {
+  to { transform: rotate(360deg); }
+}
+.vp-orbit {
+  animation: vpSpin 5s linear infinite;
+  transform-box: view-box;
+  transform-origin: 160px 100px;
+}
+.vp-counter {
+  animation: vpSpin 5s linear infinite reverse;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.vp-forward {
+  animation: vpSpin 5s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes vpBelly {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.022); }
+}
+.vp-belly {
+  animation: vpBelly 5s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 160px 100px;
+}
+
+::selection {
+  background: rgba(255, 109, 90, 0.45);
+  color: #fff;
+}
+
+/* ---------- scrollbars ---------- */
+.nice-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.nice-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 99px;
+}
+.nice-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- reveal on scroll ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.on {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- ambient background ---------- */
+@keyframes drift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, 35px) scale(1.08); }
+}
+@keyframes drift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(45px, -30px) scale(1.12); }
+}
+.bg-drift-1 { animation: drift1 16s ease-in-out infinite; }
+.bg-drift-2 { animation: drift2 20s ease-in-out infinite; }
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+.breathe { animation: breathe 2.6s ease-in-out infinite; transform-origin: center; }
+
+@keyframes flicker {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  30% { transform: scale(1.15) rotate(3deg); }
+  60% { transform: scale(0.94) rotate(-3deg); }
+}
+.flicker { animation: flicker 1.6s ease-in-out infinite; transform-origin: 50% 85%; }
+
+/* ---------- body-map zones ---------- */
+@keyframes pulseZone {
+  0%, 100% { opacity: 0.35; transform: scale(0.92); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
+.zone-blob {
+  animation: pulseZone 2.4s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spinSlow 7s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* ---------- ui motion ---------- */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.rise-in { animation: riseIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.95); }
+  to { opacity: 1; transform: none; }
+}
+.toast-in { animation: toastIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.6); }
+  70% { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.pop-in { animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes typingDot {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-4px); }
+}
+.typing-dot { animation: typingDot 1.1s ease-in-out infinite; }
+
+@keyframes countPulse {
+  0% { transform: scale(1.25); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.count-pulse { animation: countPulse 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-text {
+  background: linear-gradient(100deg, #f6efe8 30%, #ffb084 50%, #f6efe8 70%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+
+/* ---------- exercise demo loops ---------- */
+@keyframes efBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(11px); } }
+@keyframes efLift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes efKick { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-22deg); } }
+@keyframes efSideleg { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-30deg); } }
+@keyframes efPush { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(6deg); } }
+@keyframes efFly { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(70deg); } }
+@keyframes efPressL { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+@keyframes efPressR { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-3px); } }
+@keyframes efSpark { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes efTap {
+  0%, 12% { transform: rotate(0deg); }
+  42%, 58% { transform: rotate(-72deg); }
+  88%, 100% { transform: rotate(0deg); }
+}
+@keyframes efVac { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.5); } }
+@keyframes efSph { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+@keyframes efCurl { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-24deg); } }
+@keyframes efTwist { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+@keyframes efArrow { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+.ef-bob { animation: efBob 2.2s ease-in-out infinite; }
+.ef-lift { animation: efLift 2.2s ease-in-out infinite; }
+.ef-kick { animation: efKick 2.2s ease-in-out infinite; }
+.ef-sideleg { animation: efSideleg 2.2s ease-in-out infinite; }
+.ef-push { animation: efPush 2.4s ease-in-out infinite; }
+.ef-fly { animation: efFly 2.4s ease-in-out infinite; }
+.ef-press-l { animation: efPressL 1.4s ease-in-out infinite; }
+.ef-press-r { animation: efPressR 1.4s ease-in-out infinite; }
+.ef-spark { animation: efSpark 1.4s ease-in-out infinite; }
+.ef-tap { animation: efTap 2.4s ease-in-out infinite; }
+.ef-vac { animation: efVac 3s ease-in-out infinite; }
+.ef-sph { animation: efSph 2.4s ease-in-out infinite; }
+.ef-curl { animation: efCurl 2.2s ease-in-out infinite; }
+.ef-twist { animation: efTwist 2.4s ease-in-out infinite; }
+.ef-arrow { animation: efArrow 2.2s ease-in-out infinite; }
+
+.btn-press {
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.btn-press:active {
+  transform: scale(0.95);
+}
+
+/* ---------- alarm ---------- */
+@keyframes alarmRing {
+  0% { transform: scale(0.7); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.alarm-ring {
+  animation: alarmRing 1.4s cubic-bezier(0.2, 0.6, 0.36, 1) infinite;
+}
+
+@keyframes bellShake {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-12deg); }
+  45% { transform: rotate(9deg); }
+  60% { transform: rotate(-6deg); }
+  75% { transform: rotate(3deg); }
+}
+.bell-shake {
+  animation: bellShake 1.1s ease-in-out infinite;
+}
+
+input[type="time"] {
+  color-scheme: dark;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
